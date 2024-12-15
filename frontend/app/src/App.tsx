@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 
-const SLOT_ITEMS = Array.from({ length: 99 }, (_, i) => i + 1);
+const SLOT_ITEMS = [
+  "🍒", "🍋", "🍊", "🍉", "🍇", "🍓", "🍎", "🍍", "🍒", "7️⃣", "BAR", "🔔", "💎", "⭐️", "🍀"
+];
 
 interface SlotProps {
   items: number[];

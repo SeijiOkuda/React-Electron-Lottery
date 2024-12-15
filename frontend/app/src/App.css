@@ -1,5 +1,28 @@
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #2a2a2a; /* ダークな背景色 */
+  font-family: 'Arial', sans-serif;
+}
+
 .App {
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  border: 2px solid #FFD700; /* ゴールドの枠線 */
+  border-radius: 15px;
+  background-color: #333; /* 暗い背景色 */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6); /* 大きなシャドウ */
+  width: 80%;
+  max-width: 600px;
 }
 
 .slot-container {
@@ -10,13 +33,16 @@
 }
 
 .slot-column {
-  width: 60px;
-  height: 200px; /* 3つのスロットアイテムとボタンが収まるサイズ */
-  border: 1px solid #ccc;
+  width: 80px;
+  height: 250px; /* スロット列の高さを調整 */
+  border: 3px solid #FFD700; /* ゴールドの枠線 */
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-color: #1c1c1c; /* 背景をダークに */
+  border-radius: 10px; /* 丸みをつける */
+  overflow: hidden;
 }
 
 .slot-items {
@@ -24,26 +50,55 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  overflow: hidden; /* アイテムだけを隠す */
+  overflow: hidden;
+  width: 100%;
 }
 
 .slot-item {
   font-size: 24px;
-  height: 50px; /* 各アイテムの高さ */
+  height: 50px;
   line-height: 50px;
   text-align: center;
-  color: #333;
+  color: #FFD700; /* ゴールドの文字色 */
+  font-weight: bold;
+  transition: transform 0.2s ease-in-out; /* アニメーション */
+  width: 100%;
 }
 
 .slot-item.selected {
-  color: red;
-  font-weight: bold;
+  color: #FF0000; /* 選択されたアイテムは赤 */
+  font-size: 26px; /* 選択されたアイテムを少し大きく */
+  transform: scale(1.2); /* アイテムが少し大きくなる */
+  width: 100%;
 }
 
 .toggle-button {
-  margin-top: 10px;
-  padding: 5px 10px;
-  font-size: 16px;
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 18px;
   cursor: pointer;
-  width: 100%; /* ボタンの幅をスロット列に合わせる */
+  width: 100%;
+  background-color: #FFD700; /* ゴールドのボタン */
+  color: #2a2a2a; /* ボタンの文字色 */
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: background-color 0.3s ease, transform 0.2s ease-in-out; /* ホバー時のアニメーション */
+}
+
+.toggle-button:hover {
+  background-color: #FF6347; /* ホバー時にボタンが赤く */
+  transform: scale(1.1); /* ホバー時にボタンが少し大きくなる */
+}
+
+.toggle-button:disabled {
+  background-color: #999; /* 無効時の色 */
+  cursor: not-allowed; /* 無効時のカーソル */
+}
+
+h1 {
+  font-size: 48px;
+  color: #39FF14; /* 蛍光グリーン */
+  text-shadow: 0 0 10px #39FF14, 0 0 20px #39FF14, 0 0 30px #39FF14, 0 0 40px #39FF14; /* 蛍光の光るエフェクト */
+  margin-bottom: 20px;
 }
