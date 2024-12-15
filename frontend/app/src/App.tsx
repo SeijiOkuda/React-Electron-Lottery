@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 
-const SLOT_ITEMS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+const SLOT_ITEMS = Array.from({ length: 99 }, (_, i) => i + 1);
 
 interface SlotProps {
   items: number[];
@@ -23,7 +23,7 @@ const SlotColumn: React.FC<SlotProps> = ({
 
     const interval = setInterval(() => {
       onUpdatePosition((position + 1) % items.length);
-    }, 100); // 回転速度
+    }, 10); // 回転速度
 
     return () => clearInterval(interval);
   }, [spinning, position, items.length, onUpdatePosition]);
@@ -52,7 +52,7 @@ const SlotColumn: React.FC<SlotProps> = ({
         onClick={onToggle}
         disabled={!spinning} // spinningがfalseのときボタンを無効化
       >
-        {spinning ? "Stop" : "Start"}
+        Stop
       </button>
     </div>
   );
