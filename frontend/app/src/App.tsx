@@ -47,7 +47,11 @@ const SlotColumn: React.FC<SlotProps> = ({
           </div>
         ))}
       </div>
-      <button className="toggle-button" onClick={onToggle}>
+      <button
+        className="toggle-button"
+        onClick={onToggle}
+        disabled={!spinning} // spinningがfalseのときボタンを無効化
+      >
         {spinning ? "Stop" : "Start"}
       </button>
     </div>
