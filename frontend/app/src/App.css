@@ -1,0 +1,49 @@
+.App {
+  text-align: center;
+}
+
+.slot-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.slot-column {
+  width: 60px;
+  height: 200px; /* 3つのスロットアイテムとボタンが収まるサイズ */
+  border: 1px solid #ccc;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.slot-items {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden; /* アイテムだけを隠す */
+}
+
+.slot-item {
+  font-size: 24px;
+  height: 50px; /* 各アイテムの高さ */
+  line-height: 50px;
+  text-align: center;
+  color: #333;
+}
+
+.slot-item.selected {
+  color: red;
+  font-weight: bold;
+}
+
+.toggle-button {
+  margin-top: 10px;
+  padding: 5px 10px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 100%; /* ボタンの幅をスロット列に合わせる */
+}
