@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "main": "electron/main.js",
+  "main": "electron/main.mjs",
   "scripts": {
     "dev": "concurrently \"vite\" \"cross-env VITE_DEV_SERVER_URL=http://localhost:5173 electron .\"",
     "build": "tsc -b && vite build && electron-builder",
@@ -18,6 +18,9 @@
     ],
     "directories": {
       "buildResources": "build"
+    },
+    "win": {
+      "sign": false
     }
   },
   "dependencies": {

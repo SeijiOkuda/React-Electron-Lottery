@@ -1,8 +1,9 @@
 import { app, BrowserWindow } from 'electron';
 import path from 'path';
+import url from 'url';
 
 // __dirnameの代わりにimport.meta.urlを使用してパスを取得
-const __dirname = path.dirname(new URL(import.meta.url).pathname);
+const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 
 let mainWindow;
 

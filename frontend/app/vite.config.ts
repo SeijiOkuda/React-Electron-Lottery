@@ -7,6 +7,7 @@ export default defineConfig({
   server: {
     open: true, // 開発サーバーが自動でブラウザを開くようにする
   },
+  base: './',
   build: {
     outDir: 'dist',
   },
