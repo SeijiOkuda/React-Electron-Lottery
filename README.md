@@ -1,40 +1,68 @@
-# docker-devcontainer-react-vite
-Reactを使用できる高速なビルド環境をdockerのdevcontainerで実現
+# React + Electron アプリケーション
 
-# 環境前提
-* windows PC 10 or 11
-* Docker desktop for windows
-* docker-compose
-* VSCode
-* Dev Containers (VSCode拡張機能)
+このプロジェクトは、ReactとElectronを組み合わせてデスクトップアプリケーションを開発するための雛形です。Reactをフロントエンドに使用し、Electronでデスクトップアプリケーションとしてパッケージ化します。Viteを使用して開発サーバーを構築し、Reactコンポーネントを高速にビルドして提供します。
 
-# 構築方法
-1. ルートフォルダで以下のコマンドを実行  
-```ps
-docker-compose up -d --build
+## セットアップ
+
+### 1. リポジトリをクローン
+
+まず、リポジトリをローカルにクローンします。
+
+```bash
+git clone https://github.com/SeijiOkuda/React-Electron-Lottery.git
+cd React-Electron-Lottery
 ```
-2. 正常に終了後に以下のリンクにアクセスすると画面が表示される  
-http://localhost:5173/
 
-# 開発方法
-* 開発は`devcontainer`内で行います。  
-  補足:`devcontainer`はdockerコンテナ内へホスト側のvscodeを接続できる環境で、ホスト側にいながらあたかもコンテナ内にいるかのように開発できます。例としてホスト側にはfrontend配下の`node_modules`の中身が存在しない(`npm install`はあくまでコンテナ内で実行されます)ですが、コンテナ内には存在するため`devcontainer`を使用すると`node_modules`が表示されるようになります。またvscodeの拡張機能はこのプロジェクト用にコンテナ内にインストールを行うためホスト側のvscodeの環境を汚染しません。
+### 2. 依存関係をインストール
 
-## `devcontainer`起動方法
-1. ルートフォルダ配下をvscodeで立ち上げる  
-2. vscodeの左下の`><`をクリック  
-![alt text](image-1.png)
-3. 「コンテナーで再度開く」(Reopen in container)をクリック  
-![alt text](image-2.png)
-4. あとは待つだけ　※最初は少しだけ長い  
+プロジェクトの依存関係をインストールします。
 
-## 補足
-* ホットリロードが有効なのでファイルの変更を保存すればすぐに(http://localhost:5173/)で確認できます。
-* `devcontainer`での開発を基本としてください。
-* npmでライブラリを追加した後はDockerコンテナとイメージを一度破棄してから、構築をし直して問題なく起動するかも確認してください。  
+```bash
+npm install
+```
 
-# 参考
-* [React](https://ja.react.dev/)
-* [Vite](https://ja.vitejs.dev/)
-* [Docker](https://www.docker.com/ja-jp/)
-* [Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers)
+### 3. 開発サーバーの起動
+
+開発サーバーを起動し、アプリケーションを開発します。
+
+```bash
+npm run dev
+```
+
+ブラウザが自動的に開き、Reactで構築されたアプリケーションが表示されます。Electronのウィンドウでの表示は、開発中はViteのサーバーを使い、本番ビルドでは`electron-builder`を使ってパッケージ化します。
+
+### 4. ビルド
+
+本番ビルドを作成します。ビルド後、アプリケーションはデスクトップ用のインストーラーとしてパッケージ化されます。
+
+```bash
+npm run build
+```
+
+ビルドが完了すると、`dist/`ディレクトリに本番用のアプリケーションが作成されます。
+
+### 5. デスクトップアプリケーションの実行
+
+Electronアプリケーションをローカルで実行するには、以下のコマンドを実行します。
+
+```bash
+npm run start
+```
+
+このコマンドは、ビルドされたアプリケーションをElectronで実行し、デスクトップアプリとして起動します。
+
+## 必要なツール
+
+- [Node.js](https://nodejs.org/): JavaScriptランタイム
+- [npm](https://www.npmjs.com/): Node.jsのパッケージ管理ツール
+- [Electron](https://www.electronjs.org/): デスクトップアプリケーション用フレームワーク
+- [Vite](https://vitejs.dev/): 高速な開発サーバーとバンドラー
+
+## トラブルシューティング
+
+- `SyntaxError: Unexpected token ':'` エラーが発生する場合は、`main.js`ファイル内の`import.meta.url`の使い方や`package.json`の`type`設定が正しいことを確認してください。
+- ビルド後にアプリケーションが白い画面になる場合、`main.js`の`loadURL`や`loadFile`のパスが正しく設定されていることを確認してください。
+
+## ライセンス
+
+このプロジェクトは、MITライセンスの下で提供されています。
