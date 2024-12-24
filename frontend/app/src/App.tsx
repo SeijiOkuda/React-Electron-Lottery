@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 
 const SLOT_ITEMS = [
-  "🍒", "🍋", "🍊", "🍉", "🍇", "🍓", "🍎", "🍍", "🍒", "7️⃣", "BAR", "🔔", "💎", "⭐️", "🍀"
+  "🍒", "🍋", "🍊", "🍉", "🍇", "🍓", "🍎", "🍍", "🍒", "7️⃣", "BAR", "🔔", "💎", "⭐️", "🍀",
 ];
 
 interface SlotProps {
-  items: number[];
+  items: string[];
   spinning: boolean;
   position: number;
   onUpdatePosition: (newPosition: number) => void;
@@ -30,11 +30,10 @@ const SlotColumn: React.FC<SlotProps> = ({
     return () => clearInterval(interval);
   }, [spinning, position, items.length, onUpdatePosition]);
 
-  // 表示するスロットアイテムを計算（現在位置 + 前後）
   const visibleItems = [
-    items[(position + items.length - 1) % items.length], // 上
-    items[position], // 中央
-    items[(position + 1) % items.length], // 下
+    items[(position + items.length - 1) % items.length],
+    items[position],
+    items[(position + 1) % items.length],
   ];
 
   return (
@@ -52,7 +51,7 @@ const SlotColumn: React.FC<SlotProps> = ({
       <button
         className="toggle-button"
         onClick={onToggle}
-        disabled={!spinning} // spinningがfalseのときボタンを無効化
+        disabled={!spinning}
       >
         Stop
       </button>
@@ -63,6 +62,7 @@ const SlotColumn: React.FC<SlotProps> = ({
 const App: React.FC = () => {
   const [positions, setPositions] = useState([0, 0, 0]); // 各列の位置
   const [spinning, setSpinning] = useState([true, true, true]); // 各列の回転状態
+  const [result, setResult] = useState<string | null>(null); // ポップアップの内容
 
   const toggleSlot = (index: number) => {
     setSpinning((prev) => {
@@ -80,13 +80,20 @@ const App: React.FC = () => {
     });
   };
 
-  // すべてのスロットが停止状態なら、自動的に回転開始
   useEffect(() => {
     if (spinning.every((spin) => !spin)) {
-      // すべてのスロットが停止状態なら回転開始
-      setSpinning([true, true, true]);
+      // 全て停止した場合に中央のアイテムを表示
+      const selectedItems = positions.map((pos) => SLOT_ITEMS[pos]);
+      setResult(`当たった値: ${selectedItems.join(", ")}`);
+
+      // 一定時間後に再回転開始
+      setTimeout(() => {
+        setSpinning([true, true, true]);
+      }, 3000);
     }
-  }, [spinning]);
+  }, [spinning, positions]);
+
+  const closePopup = () => setResult(null); // ポップアップを閉じる
 
   return (
     <div className="App">
@@ -105,6 +112,14 @@ const App: React.FC = () => {
           />
         ))}
       </div>
+      {result && (
+        <div className="popup">
+          <div className="popup-content">
+            <p>{result}</p>
+            <button onClick={closePopup}>Close</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
