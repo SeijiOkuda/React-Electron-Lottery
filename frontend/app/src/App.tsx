@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 
 const SLOT_ITEMS = [
-  "🍒", "🍋", "🍊", "🍉", "🍇", "🍓", "🍎", "🍍", "🍒", "7️⃣", "BAR", "🔔", "💎", "⭐️", "🍀",
+  "🍒", "🍋", "🍊", "🍉", "🍇", "🍓", "🍎", "🍍", "🍒", "7️⃣", "BAR", "🔔", "💎", "⭐️", "🍀"
 ];
 
 interface SlotProps {
@@ -10,7 +10,7 @@ interface SlotProps {
   spinning: boolean;
   position: number;
   onUpdatePosition: (newPosition: number) => void;
-  onToggle: () => void;
+  onStop: () => void;
 }
 
 const SlotColumn: React.FC<SlotProps> = ({
@@ -18,7 +18,7 @@ const SlotColumn: React.FC<SlotProps> = ({
   spinning,
   position,
   onUpdatePosition,
-  onToggle,
+  onStop,
 }) => {
   useEffect(() => {
     if (!spinning) return;
@@ -31,9 +31,9 @@ const SlotColumn: React.FC<SlotProps> = ({
   }, [spinning, position, items.length, onUpdatePosition]);
 
   const visibleItems = [
-    items[(position + items.length - 1) % items.length],
-    items[position],
-    items[(position + 1) % items.length],
+    items[(position + items.length - 1) % items.length], // 上
+    items[position], // 中央
+    items[(position + 1) % items.length], // 下
   ];
 
   return (
@@ -50,8 +50,8 @@ const SlotColumn: React.FC<SlotProps> = ({
       </div>
       <button
         className="toggle-button"
-        onClick={onToggle}
-        disabled={!spinning}
+        onClick={onStop}
+        disabled={!spinning} // 回転中は無効化
       >
         Stop
       </button>
@@ -62,14 +62,25 @@ const SlotColumn: React.FC<SlotProps> = ({
 const App: React.FC = () => {
   const [positions, setPositions] = useState([0, 0, 0]); // 各列の位置
   const [spinning, setSpinning] = useState([true, true, true]); // 各列の回転状態
-  const [result, setResult] = useState<string | null>(null); // ポップアップの内容
+  const [popupVisible, setPopupVisible] = useState(false); // ポップアップの表示状態
+  const [winningItems, setWinningItems] = useState<string[]>([]); // 当たったアイテム
+  const [stoppedSlots, setStoppedSlots] = useState([false, false, false]); // 各スロットが停止したかどうか
 
-  const toggleSlot = (index: number) => {
-    setSpinning((prev) => {
-      const updated = [...prev];
-      updated[index] = !prev[index];
-      return updated;
-    });
+  const stopSlot = (index: number) => {
+    const newSpinning = [...spinning];
+    newSpinning[index] = false;
+    setSpinning(newSpinning);
+
+    const newStoppedSlots = [...stoppedSlots];
+    newStoppedSlots[index] = true;
+    setStoppedSlots(newStoppedSlots);
+
+    // すべてのスロットが停止したタイミングでポップアップを表示
+    if (newStoppedSlots.every((stopped) => stopped)) {
+      const newWinningItems = positions.map(position => SLOT_ITEMS[position]);
+      setWinningItems(newWinningItems); // 各スロットの選ばれたアイテムを格納
+      setPopupVisible(true);
+    }
   };
 
   const updatePosition = (index: number, newPosition: number) => {
@@ -80,20 +91,11 @@ const App: React.FC = () => {
     });
   };
 
-  useEffect(() => {
-    if (spinning.every((spin) => !spin)) {
-      // 全て停止した場合に中央のアイテムを表示
-      const selectedItems = positions.map((pos) => SLOT_ITEMS[pos]);
-      setResult(`当たった値: ${selectedItems.join(", ")}`);
-
-      // 一定時間後に再回転開始
-      setTimeout(() => {
-        setSpinning([true, true, true]);
-      }, 3000);
-    }
-  }, [spinning, positions]);
-
-  const closePopup = () => setResult(null); // ポップアップを閉じる
+  const handleClosePopup = () => {
+    setPopupVisible(false);
+    setSpinning([true, true, true]); // ポップアップを閉じてスロット再開
+    setStoppedSlots([false, false, false]); // 停止状態リセット
+  };
 
   return (
     <div className="App">
@@ -103,20 +105,21 @@ const App: React.FC = () => {
           <SlotColumn
             key={index}
             items={SLOT_ITEMS}
-            spinning={spinning[index]}
+            spinning={spinning[index]} // 各列ごとに停止状態
             position={position}
             onUpdatePosition={(newPosition) =>
               updatePosition(index, newPosition)
             }
-            onToggle={() => toggleSlot(index)}
+            onStop={() => stopSlot(index)} // 個別停止処理
           />
         ))}
       </div>
-      {result && (
+
+      {popupVisible && (
         <div className="popup">
           <div className="popup-content">
-            <p>{result}</p>
-            <button onClick={closePopup}>Close</button>
+            <p>当たったアイテム: {winningItems.join(", ")}</p>
+            <button onClick={handleClosePopup}>閉じる</button>
           </div>
         </div>
       )}
